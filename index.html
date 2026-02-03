@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mychat 3D Vibe</title>
+    <title>My Love Chat 3D</title>
     
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -17,57 +17,146 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
     <style>
-        :root { --primary: #6366f1; --secondary: #f43f5e; --bg: #e0e5ec; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        :root {
+            --red-main: #e63946;
+            --red-light: #ffccd5;
+            --red-dark: #a4161a;
+            --bg: #fff0f3;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Modern 3D Soft Design (Neumorphism) */
         #login-box, #chat-box {
-            background: var(--bg); width: 95%; max-width: 450px; margin: 10px; border-radius: 40px;
-            box-shadow: 20px 20px 60px #bec3c9, -20px -20px 60px #ffffff;
-            display: flex; flex-direction: column; overflow: hidden;
+            background: var(--bg);
+            width: 95%;
+            max-width: 420px;
+            margin: 15px;
+            border-radius: 50px;
+            box-shadow: 20px 20px 60px #d9cfd1, -20px -20px 60px #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(230, 57, 70, 0.1);
         }
 
-        #chat-box { display: none; height: 95vh; position: relative; }
+        #chat-box { display: none; height: 92vh; position: relative; }
 
-        #messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 75%; padding: 15px; border-radius: 25px; font-size: 15px; box-shadow: 6px 6px 12px #bec3c9, -6px -6px 12px #ffffff; position: relative; }
-        .msg.me { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 5px; }
-        .msg.others { align-self: flex-start; background: white; color: #333; border-bottom-left-radius: 5px; }
-        .msg b { display: block; font-size: 11px; margin-bottom: 5px; opacity: 0.8; }
-        .msg-info { display: block; font-size: 10px; margin-top: 5px; opacity: 0.7; text-align: right; }
+        /* Mesaj Alanı */
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
 
-        .input-area { padding: 20px; background: var(--bg); display: flex; gap: 12px; align-items: center; border-top: 1px solid rgba(0,0,0,0.05); }
-        input { flex: 1; padding: 15px; border: none; border-radius: 25px; background: var(--bg); box-shadow: inset 6px 6px 12px #bec3c9, inset -6px -6px 12px #ffffff; outline: none; }
-        
+        .msg {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            box-shadow: 5px 5px 15px #d9cfd1, -5px -5px 15px #ffffff;
+            position: relative;
+            line-height: 1.4;
+        }
+
+        .msg.me {
+            align-self: flex-end;
+            background: linear-gradient(145deg, #ff4d6d, #c9184a);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .msg.others {
+            align-self: flex-start;
+            background: white;
+            color: var(--red-dark);
+            border-bottom-left-radius: 5px;
+        }
+
+        .msg b { display: block; font-size: 11px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .msg-info { display: block; font-size: 10px; margin-top: 6px; opacity: 0.7; text-align: right; }
+
+        /* Giriş ve Buton Alanı */
+        .input-area {
+            padding: 25px;
+            background: var(--bg);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-top: 1px solid rgba(230, 57, 70, 0.1);
+        }
+
+        input {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 30px;
+            background: var(--bg);
+            box-shadow: inset 6px 6px 12px #d9cfd1, inset -6px -6px 12px #ffffff;
+            outline: none;
+            color: var(--red-dark);
+        }
+
         .btn-3d {
-            width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer;
-            background: var(--bg); box-shadow: 6px 6px 12px #bec3c9, -6px -6px 12px #ffffff;
-            display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.2s;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: var(--bg);
+            box-shadow: 6px 6px 12px #d9cfd1, -6px -6px 12px #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: 0.3s;
         }
-        .btn-3d:active { box-shadow: inset 4px 4px 8px #bec3c9, inset -4px -4px 8px #ffffff; transform: scale(0.95); }
-        .btn-vibe { color: var(--secondary); }
-        .btn-send { color: var(--primary); }
 
-        .shake { animation: shake 0.5s; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        .btn-3d:active {
+            box-shadow: inset 4px 4px 8px #d9cfd1, inset -4px -4px 8px #ffffff;
+            transform: scale(0.92);
+        }
+
+        .btn-vibe { color: var(--red-main); }
+        .btn-send { color: #2a9d8f; }
+
+        /* Aşk Titremesi */
+        .shake { animation: heartBeat 0.5s; }
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <div id="login-box" style="justify-content:center; align-items:center; padding:40px;">
-        <h2 style="color:var(--primary); margin-bottom:30px;">Mychat 3D</h2>
-        <button class="msg" style="width:100%; margin-bottom:15px; cursor:pointer; border:none; background:white;" onclick="startChat('Yakup')">🙋‍♂️ Yakup Girişi</button>
-        <button class="msg" style="width:100%; cursor:pointer; border:none; background:white;" onclick="startChat('Sıla')">🙋‍♀️ Sıla Girişi</button>
+    <div id="login-box" style="justify-content:center; align-items:center; padding:50px; text-align:center;">
+        <div style="font-size: 50px; margin-bottom: 10px;">❤️</div>
+        <h2 style="color:var(--red-main); margin-bottom:40px; letter-spacing:2px;">AŞK SOHBETİ</h2>
+        <button class="msg" style="width:100%; margin-bottom:20px; cursor:pointer; border:none; background:white; font-weight:bold; color:var(--red-main);" onclick="startChat('Yakup')">🙋‍♂️ Yakup Girişi</button>
+        <button class="msg" style="width:100%; cursor:pointer; border:none; background:white; font-weight:bold; color:var(--red-main);" onclick="startChat('Sıla')">🙋‍♀️ Sıla Girişi</button>
     </div>
 
     <div id="chat-box">
+        <div style="padding: 15px; text-align: center; color: var(--red-main); font-weight: bold; border-bottom: 1px solid rgba(230, 57, 70, 0.1);">❤️ My Love Chat</div>
         <div id="messages"></div>
         <div class="input-area">
-            <button class="btn-3d btn-vibe" onclick="sendVibe()">📳</button>
-            <input type="text" id="messageInput" placeholder="Mesaj yazın..." autocomplete="off">
+            <button class="btn-3d btn-vibe" onclick="sendVibe()" title="Kalp Atışı Gönder">❤️</button>
+            <input type="text" id="messageInput" placeholder="Seni seviyorum yaz..." autocomplete="off">
             <button class="btn-3d btn-send" onclick="sendMessage()">🚀</button>
         </div>
     </div>
@@ -92,8 +181,8 @@
             document.getElementById('login-box').style.display = 'none';
             document.getElementById('chat-box').style.display = 'flex';
             
-            // Mesajları Getir
-            db.ref("messages").limitToLast(20).on("child_added", (snapshot) => {
+            // Mesajları Dinle
+            db.ref("messages").limitToLast(25).on("child_added", (snapshot) => {
                 const data = snapshot.val();
                 const isMe = data.user === currentUser;
                 const d = new Date(data.timestamp);
@@ -107,13 +196,14 @@
                 document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
             });
 
-            // Titreşimi Dinle
+            // "Vibe" (Kalp Atışı/Titreşim) Dinle
             db.ref("vibes").on("value", (snapshot) => {
                 const data = snapshot.val();
+                // Eğer son 3 saniye içinde karşıdan bir kalp atışı geldiyse
                 if(data && data.from !== currentUser && (Date.now() - data.timestamp < 3000)) {
                     const box = document.getElementById('chat-box');
                     box.classList.add('shake');
-                    if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+                    if (navigator.vibrate) navigator.vibrate([400, 200, 400]); // Güçlü titreşim
                     setTimeout(() => box.classList.remove('shake'), 500);
                 }
             });
@@ -122,7 +212,11 @@
         function sendMessage() {
             const input = document.getElementById('messageInput');
             if(input.value.trim()) {
-                db.ref("messages").push().set({ user: currentUser, text: input.value, timestamp: Date.now() });
+                db.ref("messages").push().set({
+                    user: currentUser,
+                    text: input.value,
+                    timestamp: Date.now()
+                });
                 input.value = "";
             }
         }
