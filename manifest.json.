@@ -1,7 +1,7 @@
 {
   "name": "My Love Chat",
   "short_name": "LoveChat",
-  "start_url": "index.html",
+  "start_url": "/mylovechataabbaabb/index.html",
   "display": "standalone",
   "background_color": "#fff0f3",
   "theme_color": "#e63946",
