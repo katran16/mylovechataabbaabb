@@ -200,7 +200,7 @@
             db.ref("vibes").on("value", (snapshot) => {
                 const data = snapshot.val();
                 // Eğer son 3 saniye içinde karşıdan bir kalp atışı geldiyse
-                if(data && data.from !== currentUser && (Date.now() - data.timestamp < 3000)) {
+                if(data && data.from !== currentUser) {
                     const box = document.getElementById('chat-box');
                     box.classList.add('shake');
                     if (navigator.vibrate) navigator.vibrate([400, 200, 400]); // Güçlü titreşim
