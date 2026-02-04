@@ -1,9 +1,9 @@
 {
   "name": "My Love Chat",
   "short_name": "LoveChat",
-  "start_url": "/mylovechataabbaabb/",
+  "start_url": "/mylovechataabbaabb/index.html",
+  "scope": "/mylovechataabbaabb/",
   "display": "standalone",
-​"scope": "/mylovechataabbaabb/"
   "background_color": "#fff0f3",
   "theme_color": "#e63946",
   "icons": [
@@ -14,4 +14,3 @@
     }
   ]
 }
-
